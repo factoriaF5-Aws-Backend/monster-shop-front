@@ -1,41 +1,23 @@
-// ManageProductsPage.tsx
+// src/pages/ManageProductsPage.tsx
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useTable, useSortBy, useGlobalFilter, Column } from "react-table";
 import {
   Box,
-  Button,
-  Input,
-  Table,
-  Thead,
-  Tbody,
-  Flex,
-  Tr,
-  Th,
-  Td,
   VStack,
   Heading,
-  HStack,
-  IconButton,
-  Image,
-  Switch,
-  useDisclosure,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
   FormControl,
   FormLabel,
+  Switch,
+  useDisclosure,
+  Image,
+  HStack,
+  IconButton,
 } from "@chakra-ui/react";
-import {
-  FiSearch,
-  FiChevronUp,
-  FiChevronDown,
-  FiEdit,
-  FiTrash,
-} from "react-icons/fi";
+import ProductTable from "./ProductTable";
+import DeleteDialog from "./DeleteDialog";
+import SearchBar from "./SearchBar";
 import { ProductServices } from "../../services/product.services";
+import { FiTrash } from "react-icons/fi";
 
 type Product = {
   id: number;
@@ -45,13 +27,39 @@ type Product = {
   featured: boolean;
 };
 
-const ProductManagerPage: React.FC = () => {
+const initialProducts: Product[] = [
+  {
+    id: 1,
+    name: "Nike Shoes Blue",
+    price: 100,
+    imageUrl:
+      "https://images.pexels.com/photos/3766180/pexels-photo-3766180.jpeg?cs=srgb&dl=pexels-alexazabache-3766180.jpg&fm=jpg",
+    featured: true,
+  },
+  {
+    id: 2,
+    name: "Nike Shoes Green",
+    price: 150,
+    imageUrl:
+      "https://b2861582.smushcdn.com/2861582/wp-content/uploads/2023/02/splash-01-605-v1.png?lossy=2&strip=1&webp=1",
+    featured: false,
+  },
+  {
+    id: 3,
+    name: "Nike Shoes Red",
+    price: 200,
+    imageUrl:
+      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL3JtMzYyLTAxYS1tb2NrdXAuanBn.jpg",
+    featured: false,
+  },
+];
+
+const ManageProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [showFeatured, setShowFeatured] = useState<boolean>(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
     null
   );
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const fetchProducts = async () => {
@@ -73,12 +81,11 @@ const ProductManagerPage: React.FC = () => {
     onOpen();
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (selectedProductId !== null) {
-      setProducts(
-        products.filter((product) => product.id !== selectedProductId)
-      );
+      await ProductServices.deleteProduct(selectedProductId);
       setSelectedProductId(null);
+      fetchProducts();
       onClose();
     }
   };
@@ -155,14 +162,16 @@ const ProductManagerPage: React.FC = () => {
   }, [products, showFeatured]);
 
   const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
     setGlobalFilter,
     state: { globalFilter },
-  } = useTable({ columns, data }, useGlobalFilter, useSortBy);
+  } = useTable(
+    {
+      columns,
+      data,
+    },
+    useGlobalFilter,
+    useSortBy
+  );
 
   return (
     <Box
@@ -179,17 +188,10 @@ const ProductManagerPage: React.FC = () => {
         Manage Products
       </Heading>
       <VStack spacing={4} align="stretch">
-        <HStack spacing={2} mb={5}>
-          <Input
-            placeholder="Search products..."
-            value={globalFilter || ""}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            bg="white"
-            color="black"
-            borderColor="brand.200"
-          />
-          <IconButton aria-label="Search products" icon={<FiSearch />} />
-        </HStack>
+        <SearchBar
+          globalFilter={globalFilter || ""}
+          setGlobalFilter={setGlobalFilter}
+        />
         <FormControl display="flex" alignItems="center" mb={5}>
           <FormLabel htmlFor="show-featured" mb="0" color="white">
             Show Featured Only
@@ -200,79 +202,20 @@ const ProductManagerPage: React.FC = () => {
             onChange={() => setShowFeatured(!showFeatured)}
           />
         </FormControl>
-        <Box overflowX="auto">
-          <Table {...getTableProps()} variant="simple" colorScheme="whiteAlpha">
-            <Thead>
-              {headerGroups.map((headerGroup) => (
-                <Tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => (
-                    <Th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                      color="white"
-                      //   display="flex"
-                      alignItems="center"
-                    >
-                      <Flex align="center">
-                        {column.render("Header")}
-                        <span style={{ marginLeft: "8px" }}>
-                          {column.isSorted ? (
-                            column.isSortedDesc ? (
-                              <FiChevronDown />
-                            ) : (
-                              <FiChevronUp />
-                            )
-                          ) : (
-                            <FiChevronUp visibility="hidden" />
-                          )}
-                        </span>
-                      </Flex>
-                    </Th>
-                  ))}
-                </Tr>
-              ))}
-            </Thead>
-            <Tbody {...getTableBodyProps()}>
-              {rows.map((row) => {
-                prepareRow(row);
-                return (
-                  <Tr {...row.getRowProps()}>
-                    {row.cells.map((cell) => (
-                      <Td {...cell.getCellProps()} color="white">
-                        {cell.render("Cell")}
-                      </Td>
-                    ))}
-                  </Tr>
-                );
-              })}
-            </Tbody>
-          </Table>
-        </Box>
+        <ProductTable
+          products={data}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+          handleFeaturedChange={handleFeaturedChange}
+        />
       </VStack>
-      <AlertDialog
+      <DeleteDialog
         isOpen={isOpen}
         onClose={onClose}
-        leastDestructiveRef={undefined}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Product
-            </AlertDialogHeader>
-            <AlertDialogBody>
-              Are you sure you want to delete this product? This action cannot
-              be undone.
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button onClick={onClose}>Cancel</Button>
-              <Button colorScheme="red" onClick={confirmDelete} ml={3}>
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+        onDelete={confirmDelete}
+      />
     </Box>
   );
 };
 
-export default ProductManagerPage;
+export default ManageProductsPage;
