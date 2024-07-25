@@ -10,6 +10,7 @@ import {
   MenuList,
   MenuItem,
   Avatar,
+  Divider,
 } from "@chakra-ui/react";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
@@ -104,6 +105,17 @@ const NavBar: React.FC = () => {
                 color="white"
               >
                 Settings
+              </MenuItem>
+              <Divider />
+              <MenuItem
+                as={RouterLink}
+                to="/admin/product-manager"
+                _hover={{ bg: "rgba(255, 255, 255, 0.2)" }}
+                _focus={{ bg: "rgba(255, 255, 255, 0.2)" }}
+                bg="rgba(0, 0, 0, 0.0)"
+                color="white"
+              >
+                Product Manager
               </MenuItem>
               <MenuItem
                 as={RouterLink}
