@@ -17,7 +17,7 @@ import ProductTable from "./ProductTable";
 import DeleteDialog from "./DeleteDialog";
 import SearchBar from "./SearchBar";
 import { ProductServices } from "../../services/product.services";
-import { FiTrash } from "react-icons/fi";
+import { FiEdit, FiTrash } from "react-icons/fi";
 
 type Product = {
   id: number;
@@ -26,33 +26,6 @@ type Product = {
   imageUrl: string;
   featured: boolean;
 };
-
-const initialProducts: Product[] = [
-  {
-    id: 1,
-    name: "Nike Shoes Blue",
-    price: 100,
-    imageUrl:
-      "https://images.pexels.com/photos/3766180/pexels-photo-3766180.jpeg?cs=srgb&dl=pexels-alexazabache-3766180.jpg&fm=jpg",
-    featured: true,
-  },
-  {
-    id: 2,
-    name: "Nike Shoes Green",
-    price: 150,
-    imageUrl:
-      "https://b2861582.smushcdn.com/2861582/wp-content/uploads/2023/02/splash-01-605-v1.png?lossy=2&strip=1&webp=1",
-    featured: false,
-  },
-  {
-    id: 3,
-    name: "Nike Shoes Red",
-    price: 200,
-    imageUrl:
-      "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL3JtMzYyLTAxYS1tb2NrdXAuanBn.jpg",
-    featured: false,
-  },
-];
 
 const ManageProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
