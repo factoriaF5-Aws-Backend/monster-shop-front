@@ -1,12 +1,25 @@
-import { Box, Button, Heading, Image, Text } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
 import React from "react";
+import {
+  Box,
+  Button,
+  Heading,
+  Image,
+  Text,
+  HStack,
+  Icon,
+} from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { Link as ChakraLink } from "@chakra-ui/react";
+import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 
 type Product = {
   id: number;
   name: string;
   price: number;
   imageUrl: string;
+  rating: number;
+  reviewCount: number;
 };
 
 interface ProductCardProps {
@@ -14,11 +27,29 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  // Generar las estrellas de valoración
+  const renderStars = () => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= product.rating) {
+        stars.push(<Icon as={FaStar} color="yellow.400" key={i} />);
+      } else if (
+        i === Math.ceil(product.rating) &&
+        !Number.isInteger(product.rating)
+      ) {
+        stars.push(<Icon as={FaStarHalfAlt} color="yellow.400" key={i} />);
+      } else {
+        stars.push(<Icon as={FaRegStar} color="yellow.400" key={i} />);
+      }
+    }
+    return stars;
+  };
+
   return (
     <Box
       key={product.id}
       position="relative"
-      height="400px"
+      height="450px"
       borderRadius="lg"
       overflow="hidden"
       transition="transform 0.2s"
@@ -27,13 +58,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       backdropFilter="blur(10px)"
       border="1px solid rgba(255, 255, 255, 0.18)"
     >
-      <Image
-        src={product.imageUrl}
-        alt={product.name}
-        objectFit="cover"
-        width="100%"
-        height="100%"
-      />
+      <ChakraLink as={ReactRouterLink} to={`/shop/products/${product.id}`}>
+        <Image
+          src={product.imageUrl}
+          alt={product.name}
+          objectFit="cover"
+          width="100%"
+          height="100%"
+        />
+      </ChakraLink>
       <Box
         position="absolute"
         bottom="0"
@@ -46,6 +79,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <Heading as="h3" size="sm" mb={1}>
           {product.name}
         </Heading>
+        <HStack justify="center" mb={1}>
+          {renderStars()}
+          <Text fontSize="sm" ml={2}>
+            ({product.reviewCount})
+          </Text>
+        </HStack>
         <Text fontSize="md" fontWeight="bold">
           ${product.price}
         </Text>

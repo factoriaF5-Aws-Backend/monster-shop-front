@@ -6,6 +6,8 @@ import Contact from "./pages/Contact";
 import Layout from "./components/layout/Layout";
 import ShopPage from "./pages/shop/ShopPage";
 import ProductManagerPage from "./pages/product-manager/ProductManagerPage";
+import AddProductPage from "./pages/add-product/AddProductPage";
+import ProductDetailPage from "./pages/product-detail/ProductDetailPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -20,6 +22,8 @@ const AppRoutes: React.FC = () => {
             path="/admin/product-manager"
             element={<ProductManagerPage />}
           />
+          <Route path="/admin/add-product" element={<AddProductPage />} />
+          <Route path="/shop/products/:id" element={<ProductDetailPage />} />
         </Routes>
       </Layout>
     </Router>
