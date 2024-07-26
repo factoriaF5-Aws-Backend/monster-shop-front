@@ -62,13 +62,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {product.featured && (
         <Box
           position="absolute"
-          top="10px"
+          top="8px"
           right="-20px"
           width="150px"
           height="40px"
-          // bg="brand.200 0.2"
+          bg="brand.250"
           color="white"
           borderRadius="0 0 10px 10px"
+          border="1px solid rgba(255, 255, 255, 0.4)"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -76,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           textColor="white"
           backdropFilter="blur(10px)"
           boxShadow="0 0 20px rgba(0, 0, 0, 0.2)"
-          transform="rotate(45deg)"
+          transform="rotate(40deg)"
         >
           featured
         </Box>

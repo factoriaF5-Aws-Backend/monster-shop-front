@@ -16,9 +16,13 @@ const theme = extendTheme({
   colors: {
     brand: {
       100: "#f72585",
+      150: "rgba(247, 37, 133, 0.7)",
       200: "#4cc9f0",
+      250: "rgba(76, 201, 240, 0.6)",
       300: "#ffffff",
       400: "#1f1f1f",
+      // Añadir color con opacidad
+      // Color con opacidad
     },
   },
 });

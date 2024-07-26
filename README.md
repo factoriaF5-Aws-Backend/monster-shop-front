@@ -4,7 +4,7 @@
 
 ### Product Cards Grid
 
-![Image](https://github.com/user-attachments/assets/89498ad7-6d4e-4199-b5b3-4cfeeb238a92)
+<img width="1231" alt="image" src="https://github.com/user-attachments/assets/b1ffdbbf-b95b-4a06-b5c7-84d840b88042">
 
 #### Features
 
