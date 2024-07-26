@@ -20,6 +20,7 @@ type Product = {
   imageUrl: string;
   rating: number;
   reviewCount: number;
+  featured: boolean;
 };
 
 interface ProductCardProps {
@@ -58,6 +59,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       backdropFilter="blur(10px)"
       border="1px solid rgba(255, 255, 255, 0.18)"
     >
+      {product.featured && (
+        <Box
+          position="absolute"
+          top="10px"
+          right="-20px"
+          width="150px"
+          height="40px"
+          // bg="brand.200 0.2"
+          color="white"
+          borderRadius="0 0 10px 10px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          fontWeight="thin"
+          textColor="white"
+          backdropFilter="blur(10px)"
+          boxShadow="0 0 20px rgba(0, 0, 0, 0.2)"
+          transform="rotate(45deg)"
+        >
+          featured
+        </Box>
+      )}
       <ChakraLink as={ReactRouterLink} to={`/shop/products/${product.id}`}>
         <Image
           src={product.imageUrl}

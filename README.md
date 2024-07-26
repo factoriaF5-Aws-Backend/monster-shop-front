@@ -4,7 +4,7 @@
 
 ### Product Cards Grid
 
-![Image](https://github.com/user-attachments/assets/55fda9ac-a161-4871-8aca-81572d4d235a)
+![Image](https://github.com/user-attachments/assets/89498ad7-6d4e-4199-b5b3-4cfeeb238a92)
 
 Using endpoints
 
@@ -20,5 +20,6 @@ type Product = {
   imageUrl: string;
   rating: number;
   reviewCount: number;
+  featured: boolean;
 };
 ```
