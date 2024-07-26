@@ -20,11 +20,12 @@ import { useParams } from "react-router-dom";
 import { AddIcon, StarIcon } from "@chakra-ui/icons";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 import { ProductServices } from "../../services/product.services";
+import { reviewsServices } from "../../services/reviews.services";
 
 type Review = {
   username: string;
   rating: number;
-  comment: string;
+  body: string;
 };
 
 type Product = {
@@ -34,39 +35,49 @@ type Product = {
   price: number;
   imageUrl: string;
   rating: number;
-  reviews: Review[];
+  // reviews: Review[];
 };
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   //   const product = products.find((p) => p.id === parseInt(id, 10));
   const [product, setProduct] = useState<Product | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [newReview, setNewReview] = useState<Review>({
     username: "",
     rating: 0,
-    comment: "",
+    body: "",
   });
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const data = await ProductServices.findById(parseInt(id || "0", 10));
-      setProduct(data);
-    };
-    fetchProduct();
-  }, [id]);
+  const fetchReviews = async () => {
+    const data = await reviewsServices.getReviews(id);
+    console.log(data);
+    setReviews(data);
+  };
 
-  const [reviews, setReviews] = useState<Review[]>(
-    product ? product.reviews : []
-  );
+  const fetchProduct = async () => {
+    const data = await ProductServices.findById(parseInt(id || "0", 10));
+    setProduct(data);
+  };
+
+  useEffect(() => {
+    fetchProduct();
+    fetchReviews();
+  }, [id]);
 
   if (!product) {
     return <Text>Product not found</Text>;
   }
 
-  const handleAddReview = () => {
+  const handleAddReview = async () => {
     setReviews([...reviews, newReview]);
-    setNewReview({ username: "", rating: 0, comment: "" });
+    await reviewsServices.addReview({ ...newReview, productId: id });
+    fetchReviews();
+    fetchProduct();
+    setNewReview({ username: "", rating: 0, body: "" });
   };
+  // TODO: Check if the user can review the product (Using auth user)
+  const checkCanReview = reviews.every((r) => r.username !== "Sergi");
 
   return (
     <Box maxW="1200px" mx="auto" p={5} mt="20px" maxH="80vh">
@@ -177,55 +188,48 @@ const ProductDetailPage: React.FC = () => {
                 {review.username}
               </Text>
             </HStack>
-            <Text color="white">{review.comment}</Text>
+            <Text color="white">{review.body}</Text>
             <Divider mt={2} mb={2} />
           </Box>
         ))}
-        <Box mt={5}>
-          <Heading as="h4" size="md" color="white" mb={2}>
-            Add a Review
-          </Heading>
-          <FormControl mb={3}>
-            <FormLabel color="white">Name</FormLabel>
-            <Input
-              placeholder="Your name"
-              value={newReview.username}
-              onChange={(e) =>
-                setNewReview({ ...newReview, username: e.target.value })
-              }
-              bg="white"
-              color="black"
-            />
-          </FormControl>
-          <FormControl mb={3}>
-            <FormLabel color="white">Rating</FormLabel>
-            <HStack>
-              {[...Array(5)].map((_, i) => (
-                <StarIcon
-                  key={i}
-                  color={i < newReview.rating ? "teal.500" : "gray.300"}
-                  cursor="pointer"
-                  onClick={() => setNewReview({ ...newReview, rating: i + 1 })}
+        {checkCanReview && (
+          <Box mt={5}>
+            <Heading as="h4" size="md" color="white" mb={2}>
+              Add a Review
+            </Heading>
+
+            <FormControl mb={3}>
+              <FormControl mb={3}>
+                <FormLabel color="white">Comment</FormLabel>
+                <Textarea
+                  placeholder="Your review"
+                  value={newReview.body}
+                  onChange={(e) =>
+                    setNewReview({ ...newReview, body: e.target.value })
+                  }
+                  bg="white"
+                  color="black"
                 />
-              ))}
-            </HStack>
-          </FormControl>
-          <FormControl mb={3}>
-            <FormLabel color="white">Comment</FormLabel>
-            <Textarea
-              placeholder="Your review"
-              value={newReview.comment}
-              onChange={(e) =>
-                setNewReview({ ...newReview, comment: e.target.value })
-              }
-              bg="white"
-              color="black"
-            />
-          </FormControl>
-          <Button onClick={handleAddReview} colorScheme="teal">
-            Submit Review
-          </Button>
-        </Box>
+              </FormControl>
+              <FormLabel color="white">Rating</FormLabel>
+              <HStack>
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon
+                    key={i}
+                    color={i < newReview.rating ? "teal.500" : "gray.300"}
+                    cursor="pointer"
+                    onClick={() =>
+                      setNewReview({ ...newReview, rating: i + 1 })
+                    }
+                  />
+                ))}
+              </HStack>
+            </FormControl>
+            <Button onClick={handleAddReview} colorScheme="teal">
+              Submit Review
+            </Button>
+          </Box>
+        )}
       </Box>
     </Box>
   );
