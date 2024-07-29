@@ -16,10 +16,13 @@ export const ProductServices = {
     },
 
     uploadProduct: async (product: FormData) => {
+        product.append("isCover", "false");
+
+        console.log("Product to upload:", product.get("name"));
         try {
             const response = await axios.post(`${API_URL}/products`, product, {
             headers: {
-                'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data',
             },
             });
             return response.data;
@@ -31,6 +34,11 @@ export const ProductServices = {
     
     findById: async (id: number) => { 
         const response = await fetch(`${API_URL}/products/${id}`);
+        return response.json();
+    },
+
+    findFeatured: async () => { 
+        const response = await fetch(`${API_URL}/products/featured`);
         return response.json();
     }
 
