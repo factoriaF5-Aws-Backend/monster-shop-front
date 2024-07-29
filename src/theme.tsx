@@ -9,7 +9,7 @@ const theme = extendTheme({
         color: "white",
         backgroundAttachment: "fixed",
         overflowY: "scroll",
-        paddingTop: "60px", // Ajustar el padding para asegurar que el contenido no quede oculto detrás del NavBar
+        // paddingTop: "60px",
       },
     },
   },

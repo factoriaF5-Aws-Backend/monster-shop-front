@@ -11,6 +11,7 @@ import {
   MenuItem,
   Avatar,
   Divider,
+  Spacer,
 } from "@chakra-ui/react";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
@@ -19,7 +20,7 @@ import { FiShoppingBag } from "react-icons/fi"; // Usar el icono de carrito de F
 const NavBar: React.FC = () => {
   return (
     <Box
-      bg="rgba(0, 0, 0, 0.7)"
+      bg="rgba(0, 0, 0, 0.0)"
       backdropFilter="blur(10px)"
       p={4}
       color="white"
@@ -31,8 +32,17 @@ const NavBar: React.FC = () => {
       maxW={"100%"}
     >
       <Flex justify="space-between" align="center" maxW="1400px" mx="auto">
-        <Heading as="h1" size="lg">
-          eCommerce
+        <Heading as="h1" size="lg" textColor="brand.100" fontWeight="thin">
+          Happy{" "}
+          <Spacer
+            as="span"
+            display={{ base: "none", md: "inline" }}
+            textColor={"brand.200"}
+            position={"relative"}
+            left={"-10px"}
+          >
+            Monstry
+          </Spacer>
         </Heading>
         <Flex align="center">
           <Link as={RouterLink} to="/" mx={2} color="white">
