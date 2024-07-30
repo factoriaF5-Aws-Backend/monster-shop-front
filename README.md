@@ -1,5 +1,17 @@
 # Monster Shop - frontend
 
+This is the frontend part of the Monster Shop project. It is a simple e-commerce platform where users can browse products, read reviews, and rate products. The platform also has a product manager interface where the admin can manage products.
+
+## Execute in development mode
+
+- clone or fork the repository
+- run `pnpm install` to install the dependencies
+- run `pnpm run dev` to start the development server
+
+Your frontend will be available at `http://localhost:3000`.
+
+And consume the backend API available at `http://localhost:8080`.
+
 ## Shop
 
 ### Product Cards Grid
