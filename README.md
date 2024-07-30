@@ -26,6 +26,26 @@ type Product = {
 };
 ```
 
+### Product Details Page -> Reviews
+
+![Image](https://github.com/user-attachments/assets/951eba62-e819-4dc4-ac8d-72ba1079a188)
+
+#### Features
+
+#### &check; Get all the product Reviews
+
+GET /api/reviews?productId={productId}
+
+Types retrieved: Review[] (a list of reviews from the product).
+
+```typescript
+type Review = {
+  username: string;
+  rating: number;
+  body: string; // The content of the review
+};
+```
+
 ## Product Manager
 
 ### Product Table
