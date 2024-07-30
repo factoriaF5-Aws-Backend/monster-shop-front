@@ -26,7 +26,7 @@ type Product = {
 };
 ```
 
-### Product Details Page -> Reviews
+### Product Details Page -> Reviews List
 
 ![Image](https://github.com/user-attachments/assets/951eba62-e819-4dc4-ac8d-72ba1079a188)
 
@@ -41,6 +41,26 @@ Types retrieved: Review[] (a list of reviews from the product).
 ```typescript
 type Review = {
   username: string;
+  rating: number;
+  body: string; // The content of the review
+};
+```
+
+### Product Details Page -> Reviews Form
+
+#### &check; Can create a Review and Rate a product
+
+User authenticated as a customer can create a review and rate a product.
+
+![Image](https://github.com/user-attachments/assets/c29caf9e-fd5e-4209-aca1-245064771e76)
+
+POST /api/reviews
+
+Types posted: Review review with productId.
+
+```typescript
+type Review = {
+  productId: number;
   rating: number;
   body: string; // The content of the review
 };
