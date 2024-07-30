@@ -127,3 +127,20 @@ type Product = {
   featured: boolean;
 };
 ```
+
+### Product Creator Form
+
+<img width="1231" alt="image" src="https://github.com/user-attachments/assets/0a9b3485-e360-42b6-9532-fac2a04465d0">
+
+POST /api/products
+
+Use multipart/form-data to upload the image file.
+
+```typescript
+type Product = {
+  name: string;
+  price: number;
+  featured: boolean;
+  image: File; // The image file to upload
+};
+```
