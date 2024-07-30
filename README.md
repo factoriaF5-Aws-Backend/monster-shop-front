@@ -26,6 +26,30 @@ type Product = {
 };
 ```
 
+### Product Details Page -> Details
+
+<img width="1208" alt="image" src="https://github.com/user-attachments/assets/ad104887-ea04-4b89-8130-532a5ac59673">
+
+#### Features
+
+#### &check; Get all products to display in the shop grid
+
+GET /api/products/{productId}
+
+Types retrieved: Product.
+
+```typescript
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  imageUrl: string;
+  rating: number;
+  reviewCount: number;
+  featured: boolean;
+};
+```
+
 ### Product Details Page -> Reviews List
 
 ![Image](https://github.com/user-attachments/assets/951eba62-e819-4dc4-ac8d-72ba1079a188)
