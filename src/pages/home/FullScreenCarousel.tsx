@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
@@ -7,20 +7,18 @@ import { Link as ReactRouterLink } from "react-router-dom";
 const FullScreenCarousel: React.FC = ({ images }) => {
   const [current, setCurrent] = useState(0);
 
-  const length = 4;
-  const currentRef = useRef(0);
+  const length = images.length;
+  console.log("Length: " + length);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("Cambio de imagen: " + currentRef.current);
-      currentRef.current =
-        currentRef.current === length - 1 ? 0 : currentRef.current + 1;
-      setCurrent(currentRef.current);
-    }, 10000); // Cambia la imagen cada 5 segundos
+      setCurrent((prevCurrent) =>
+        prevCurrent === length - 1 ? 0 : prevCurrent + 1
+      );
+    }, 10000); // Cambia la imagen cada 10 segundos
 
-    return () => clearInterval(interval);
-    // Limpia el intervalo al desmontar el componente
-  }, []);
+    return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
+  }, [length]); // Dependencia de length para asegurar que se recalcule si las imágenes cambian
 
   if (!Array.isArray(images) || images.length <= 0) {
     return null;
